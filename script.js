@@ -170,11 +170,33 @@ const app = (function () {
     }
   }
 
-  // Lắng nghe sự kiện chuyển động
-  if (window.DeviceMotionEvent) {
-    window.addEventListener("devicemotion", handleShake);
+  if (typeof DeviceMotionEvent.requestPermission === "function") {
+    const permissionBtn = document.createElement("button");
+    permissionBtn.textContent = "Bật Lắc Tay";
+    permissionBtn.className = "btn-retro btn-retro-small";
+    permissionBtn.style.marginTop = "1rem";
+
+    permissionBtn.onclick = function () {
+      DeviceMotionEvent.requestPermission()
+        .then((response) => {
+          if (response === "granted") {
+            window.addEventListener("devicemotion", handleShake);
+            permissionBtn.style.display = "none";
+            alert("Đã bật tính năng lắc! Hãy thử lắc điện thoại.");
+          } else {
+            alert("Bạn đã từ chối quyền truy cập cảm biến.");
+          }
+        })
+        .catch(console.error);
+    };
+
+    // Thêm nút vào dưới nút Rút Thăm (trong main-stage)
+    document.querySelector(".main-stage").appendChild(permissionBtn);
   } else {
-    console.log("DeviceMotionEvent not supported");
+    // Android hoặc iOS cũ (không cần xin quyền)
+    if (window.DeviceMotionEvent) {
+      window.addEventListener("devicemotion", handleShake);
+    }
   }
 
   return { closeModal };

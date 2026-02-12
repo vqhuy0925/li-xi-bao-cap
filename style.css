@@ -110,6 +110,13 @@ h1 {
   text-transform: uppercase;
 }
 
+.btn-retro-small {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-width: 1px;
+  box-shadow: 2px 2px 0px var(--ink-color);
+}
+
 .btn-retro:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px var(--ink-color);
