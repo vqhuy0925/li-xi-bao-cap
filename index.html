@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bốc Lì Xì - Xuân Bính Ngọ 2026</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="noise-overlay"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="main-stage">
+      <div class="stamp">KIỂM DUYỆT<br />2026</div>
+      <h1>Mã Đáo Thành Công</h1>
+      <p class="slogan">"Lao động hăng say - Vận may sẽ đến"</p>
+      <div style="font-size: 4rem; margin: 2rem 0">🐎</div>
+      <button class="btn-retro" id="drawBtn">RÚT THĂM</button>
+    </div>
+
+    <div class="overlay-dim" id="overlay"></div>
+
+    <div class="modal" id="resultModal">
+      <div class="calendar-header">XUÂN BÍNH NGỌ</div>
+      <div class="calendar-body">
+        <div id="luckyAmount">...</div>
+      </div>
+      <div class="calendar-footer" id="luckyWish">...</div>
+      <button class="btn-close" onclick="app.closeModal()">Đóng</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

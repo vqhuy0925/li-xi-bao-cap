@@ -1,0 +1,250 @@
+:root {
+  --paper-color: #f0e6d2;
+  --ink-color: #2c2c2c;
+  --red-retro: #b83b3b;
+  --border-frame: #5d4037;
+  --gold-accent: #d4af37;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #1a1a1a;
+  font-family: "Courier New", Courier, monospace; /* Font máy đánh chữ */
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+/* Hiệu ứng nhiễu hạt (Noise) giả lập TV/Giấy cũ */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.1;
+  background: url("https://cdnjs.cloudflare.com/ajax/libs/colored-icons/1.0.1/bg/noise.png"); /* Placeholder noise */
+  animation: noise 0.5s steps(5) infinite;
+}
+
+/* Canvas cho hiệu ứng lì xì rơi */
+#canvas-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Container chính - Phong cách khung tranh cổ/Pano áp phích */
+.main-stage {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  max-width: 600px;
+  background-color: var(--paper-color);
+  border: 8px double var(--border-frame);
+  padding: 2rem;
+  text-align: center;
+  box-shadow:
+    0 0 50px rgba(0, 0, 0, 0.7) inset,
+    0 20px 40px rgba(0, 0, 0, 0.5);
+  /* Background ngựa phi nước đại (mô phỏng tranh Đông Hồ hoặc vẽ tay) */
+  background-image:
+    linear-gradient(rgba(240, 230, 210, 0.9), rgba(240, 230, 210, 0.8)),
+    url("https://images.unsplash.com/photo-1598556608779-d5964867c05b?q=80&w=1000&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+}
+
+.main-stage::before {
+  content: "CHÚC MỪNG NĂM MỚI - 2026";
+  display: block;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 2px solid var(--red-retro);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  color: var(--red-retro);
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: var(--red-retro);
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.slogan {
+  font-style: italic;
+  margin-bottom: 2rem;
+  color: var(--ink-color);
+  font-size: 1.1rem;
+}
+
+/* Nút bấm phong cách Tem Phiếu */
+.btn-retro {
+  background-color: var(--red-retro);
+  color: var(--paper-color);
+  border: 2px dashed var(--gold-accent);
+  padding: 1rem 2rem;
+  font-family: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  box-shadow: 4px 4px 0px var(--ink-color);
+  text-transform: uppercase;
+}
+
+.btn-retro:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--ink-color);
+  background-color: #a03030;
+}
+
+.btn-retro:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* Modal kết quả - Phong cách tờ lịch cũ */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: #fff;
+  padding: 20px;
+  z-index: 100;
+  width: 300px;
+  border: 1px solid var(--ink-color);
+  box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal.active {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.calendar-header {
+  background: var(--red-retro);
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.calendar-body {
+  padding: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--ink-color);
+}
+
+.calendar-footer {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #666;
+  border-top: 1px dotted #ccc;
+  padding-top: 10px;
+}
+
+.overlay-dim {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  backdrop-filter: sepia(80%);
+}
+
+@keyframes noise {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-5%, -5%);
+  }
+  20% {
+    transform: translate(-10%, 5%);
+  }
+  30% {
+    transform: translate(5%, -10%);
+  }
+  40% {
+    transform: translate(-5%, 15%);
+  }
+  50% {
+    transform: translate(-10%, 5%);
+  }
+  60% {
+    transform: translate(15%, 0);
+  }
+  70% {
+    transform: translate(0, 10%);
+  }
+  80% {
+    transform: translate(-15%, 0);
+  }
+  90% {
+    transform: translate(10%, 5%);
+  }
+  100% {
+    transform: translate(5%, 0);
+  }
+}
+
+/* Decorative Stamp */
+.stamp {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(184, 59, 59, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(184, 59, 59, 0.6);
+  font-weight: bold;
+  transform: rotate(-15deg);
+  font-size: 0.8rem;
+  text-align: center;
+  line-height: 1.2;
+}
+.btn-close {
+  margin-top: 15px;
+  background: transparent;
+  border: 1px solid #333;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.btn-close:hover {
+  background: #eee;
+}
