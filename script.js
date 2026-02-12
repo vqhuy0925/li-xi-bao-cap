@@ -117,8 +117,27 @@ const app = (function () {
   }
 
   function drawLuckyMoney() {
+    // Check if already drawn
+    const config = JSON.parse(localStorage.getItem(CONFIG_KEY));
+    if (config && config.hasDrawn) {
+      // Show saved result without animation/sound
+      amountEl.textContent = config.savedAmount;
+      wishEl.textContent = config.savedWish;
+      overlay.style.display = "block";
+      modal.classList.add("active");
+      return;
+    }
+
     const result = getWeightedRandom(prizeConfiguration);
     const wish = getRandomWish();
+
+    // Save result to localStorage
+    if (config) {
+      config.hasDrawn = true;
+      config.savedAmount = result.amount;
+      config.savedWish = wish;
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+    }
 
     amountEl.textContent = result.amount;
     wishEl.textContent = wish;
@@ -134,6 +153,10 @@ const app = (function () {
 
     particles.forEach((p) => (p.vy += 8));
     setTimeout(() => particles.forEach((p) => (p.vy -= 8)), 300);
+
+    // Update UI button text
+    const drawBtn = document.getElementById("drawBtn");
+    if (drawBtn) drawBtn.textContent = "XEM KẾT QUẢ";
   }
 
   function closeModal() {
@@ -148,62 +171,137 @@ const app = (function () {
   btn.addEventListener("click", drawLuckyMoney);
   overlay.addEventListener("click", closeModal);
 
-  resize();
-  initParticles();
-  animate();
+  // --- User Session Logic ---
+  const CONFIG_KEY = "lixi_user_config";
 
-  // --- Shake to Draw (Lắc để nhận lì xì) ---
-  let lastShakeTime = 0;
-  const shakeThreshold = 15; // Ngưỡng lắc (m/s^2) - Đã tính cả trọng lực
-  const shakeCooldown = 2000; // Cooldown 2s
+  function checkSession() {
+    const config = JSON.parse(localStorage.getItem(CONFIG_KEY));
+    const registerScreen = document.getElementById("registerScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const userGreeting = document.getElementById("userGreeting");
+    const drawBtn = document.getElementById("drawBtn");
 
-  function handleShake(event) {
-    // Chỉ xử lý nếu modal KHÔNG hiện (đang không có kết quả)
-    if (overlay.style.display === "block") return;
+    if (config && config.userName) {
+      // Show Game
+      registerScreen.style.display = "none";
+      gameScreen.style.display = "block";
+      userGreeting.textContent = `Đồng chí: ${config.userName}`;
 
-    const currentCheck = Date.now();
-    // Debounce: Nếu chưa hết thời gian cooldown thì bỏ qua
-    if (currentCheck - lastShakeTime < shakeCooldown) return;
-
-    const { x, y, z } = event.accelerationIncludingGravity;
-    if (!x || !y || !z) return;
-
-    const acceleration = Math.sqrt(x * x + y * y + z * z);
-
-    if (acceleration > shakeThreshold) {
-      lastShakeTime = currentCheck;
-      drawLuckyMoney();
+      if (config.hasDrawn) {
+        drawBtn.textContent = "XEM KẾT QUẢ";
+      } else {
+        drawBtn.textContent = "RÚT THĂM";
+      }
+    } else {
+      // Show Register
+      registerScreen.style.display = "block";
+      gameScreen.style.display = "none";
     }
   }
 
-  if (typeof DeviceMotionEvent.requestPermission === "function") {
-    const permissionBtn = document.createElement("button");
-    permissionBtn.textContent = "Bật Lắc Tay";
-    permissionBtn.className = "btn-retro btn-retro-small";
-    permissionBtn.style.marginTop = "1rem";
+  function registerUser() {
+    const nameInput = document.getElementById("userNameInput");
+    const name = nameInput.value.trim();
 
-    permissionBtn.onclick = function () {
-      DeviceMotionEvent.requestPermission()
-        .then((response) => {
-          if (response === "granted") {
-            window.addEventListener("devicemotion", handleShake);
-            permissionBtn.style.display = "none";
-            alert("Đã bật tính năng lắc! Hãy thử lắc điện thoại.");
-          } else {
-            alert("Bạn đã từ chối quyền truy cập cảm biến.");
-          }
-        })
-        .catch(console.error);
-    };
+    if (!name) {
+      alert("Vui lòng nhập danh tính!");
+      return;
+    }
 
-    // Thêm nút vào dưới nút Rút Thăm (trong main-stage)
-    document.querySelector(".main-stage").appendChild(permissionBtn);
-  } else {
-    // Android hoặc iOS cũ (không cần xin quyền)
-    if (window.DeviceMotionEvent) {
+    const config = { userName: name };
+    localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+    checkSession();
+  }
+
+  function resetSession() {
+    if (confirm("Kết thúc lượt chơi của đồng chí này?")) {
+      localStorage.removeItem(CONFIG_KEY);
+      location.reload();
+    }
+  }
+
+  // --- Init ---
+  function init() {
+    resize();
+    initParticles();
+    animate();
+
+    checkSession(); // Check on load
+
+    // Events
+    window.addEventListener("resize", resize);
+
+    // Register Button
+    const registerBtn = document.getElementById("registerBtn");
+    if (registerBtn) registerBtn.addEventListener("click", registerUser);
+
+    document.getElementById("drawBtn").addEventListener("click", () => {
+      // Play Sound
+      const sound = new Audio("assets/firecracker.wav");
+      sound.volume = 0.5;
+      sound.play().catch((e) => console.log("Audio play failed:", e));
+
+      drawLuckyMoney();
+    });
+
+    // --- Shake to Draw (Lắc để nhận lì xì) ---
+    let lastShakeTime = 0;
+    const shakeThreshold = 15;
+    const shakeCooldown = 2000;
+
+    function handleShake(event) {
+      if (document.getElementById("resultModal").style.display === "block")
+        return;
+      if (document.getElementById("registerScreen").style.display !== "none")
+        return; // No shake on register
+
+      const currentCheck = Date.now();
+      if (currentCheck - lastShakeTime < shakeCooldown) return;
+
+      const { x, y, z } = event.accelerationIncludingGravity;
+      if (!x || !y || !z) return;
+
+      const acceleration = Math.sqrt(x * x + y * y + z * z);
+
+      if (acceleration > shakeThreshold) {
+        lastShakeTime = currentCheck;
+        drawLuckyMoney();
+      }
+    }
+
+    // Permission Logic
+    if (
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      const btn = document.createElement("button");
+      btn.textContent = "Bật Lắc Tay";
+      btn.className = "btn-retro btn-retro-small";
+      btn.style.marginTop = "1rem";
+
+      // Append to game screen only
+      document.getElementById("gameScreen").appendChild(btn);
+
+      btn.onclick = () => {
+        DeviceMotionEvent.requestPermission()
+          .then((response) => {
+            if (response == "granted") {
+              window.addEventListener("devicemotion", handleShake);
+              btn.remove();
+            }
+          })
+          .catch(console.error);
+      };
+    } else if (window.DeviceMotionEvent) {
       window.addEventListener("devicemotion", handleShake);
     }
   }
 
-  return { closeModal };
+  init();
+
+  return {
+    drawLuckyMoney,
+    closeModal,
+    resetSession,
+  };
 })();

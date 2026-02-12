@@ -20,9 +20,32 @@
           <div class="main-stage">
             <div class="stamp">KIỂM DUYỆT<br />2026</div>
             <h1>Mã Đáo Thành Công</h1>
-            <p class="slogan">"Lao động hăng say - Vận may sẽ đến"</p>
 
-            <button class="btn-retro" id="drawBtn">RÚT THĂM</button>
+            <!-- Screen 1: Registration Form -->
+            <div id="registerScreen">
+              <p class="slogan">"Vui lòng khai báo danh tính"</p>
+              <div class="form-group">
+                <label for="userNameInput">Đồng chí:</label>
+                <input
+                  type="text"
+                  id="userNameInput"
+                  placeholder="Nhập tên..."
+                  autocomplete="off"
+                />
+              </div>
+              <button class="btn-retro" id="registerBtn">ĐĂNG KÝ</button>
+            </div>
+
+            <!-- Screen 2: Game Screen (Hidden by default) -->
+            <div id="gameScreen" style="display: none">
+              <div style="font-size: 4rem; margin: 2rem 0">🐎</div>
+              <p
+                id="userGreeting"
+                class="slogan"
+                style="margin-bottom: 1rem"
+              ></p>
+              <button class="btn-retro" id="drawBtn">RÚT THĂM</button>
+            </div>
           </div>
 
           <!-- Move Modal & Overlay inside Screen -->
@@ -33,7 +56,19 @@
               <div id="luckyAmount">...</div>
             </div>
             <div class="calendar-footer" id="luckyWish">...</div>
-            <button class="btn-close" onclick="app.closeModal()">Đóng</button>
+            <div
+              style="
+                display: flex;
+                justify-content: space-around;
+                gap: 10px;
+                margin-top: 15px;
+              "
+            >
+              <button class="btn-close" onclick="app.closeModal()">Đóng</button>
+              <button class="btn-reset" onclick="app.resetSession()">
+                Người Tiếp Theo
+              </button>
+            </div>
           </div>
         </div>
 

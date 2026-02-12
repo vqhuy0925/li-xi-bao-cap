@@ -128,8 +128,57 @@ h1 {
 }
 
 .btn-retro:active {
-  transform: translate(4px, 4px);
+  transform: translate(2px, 2px);
   box-shadow: none;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 2rem;
+  text-align: left;
+  padding: 0 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  color: var(--ink-color);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px dashed #5d4037;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1.5rem;
+  color: var(--red-retro);
+  padding: 5px 0;
+  outline: none;
+  text-align: center;
+}
+
+.form-group input::placeholder {
+  color: rgba(93, 64, 55, 0.5);
+  font-style: italic;
+}
+
+/* Secondary Button (Reset) */
+.btn-reset {
+  background: transparent;
+  border: none;
+  color: #666;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+.btn-reset:hover {
+  color: var(--red-retro);
 }
 
 /* Modal kết quả - Phong cách tờ lịch cũ */
