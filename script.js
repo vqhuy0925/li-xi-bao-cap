@@ -146,5 +146,36 @@ const app = (function () {
   initParticles();
   animate();
 
+  // --- Shake to Draw (Lắc để nhận lì xì) ---
+  let lastShakeTime = 0;
+  const shakeThreshold = 15; // Ngưỡng lắc (m/s^2) - Đã tính cả trọng lực
+  const shakeCooldown = 2000; // Cooldown 2s
+
+  function handleShake(event) {
+    // Chỉ xử lý nếu modal KHÔNG hiện (đang không có kết quả)
+    if (overlay.style.display === "block") return;
+
+    const currentCheck = Date.now();
+    // Debounce: Nếu chưa hết thời gian cooldown thì bỏ qua
+    if (currentCheck - lastShakeTime < shakeCooldown) return;
+
+    const { x, y, z } = event.accelerationIncludingGravity;
+    if (!x || !y || !z) return;
+
+    const acceleration = Math.sqrt(x * x + y * y + z * z);
+
+    if (acceleration > shakeThreshold) {
+      lastShakeTime = currentCheck;
+      drawLuckyMoney();
+    }
+  }
+
+  // Lắng nghe sự kiện chuyển động
+  if (window.DeviceMotionEvent) {
+    window.addEventListener("devicemotion", handleShake);
+  } else {
+    console.log("DeviceMotionEvent not supported");
+  }
+
   return { closeModal };
 })();
