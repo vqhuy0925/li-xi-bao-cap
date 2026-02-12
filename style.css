@@ -47,6 +47,17 @@ body {
   z-index: 1;
 }
 
+/* Canvas cho pháo hoa toàn màn hình */
+#fireworks-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999; /* Top of everything */
+}
+
 /* Container chính - Phong cách khung tranh cổ/Pano áp phích */
 .main-stage {
   position: relative;

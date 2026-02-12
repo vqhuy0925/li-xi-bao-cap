@@ -121,6 +121,193 @@ const app = (function () {
     requestAnimationFrame(animate);
   }
 
+  // --- Fireworks System ---
+  const fwCanvas = document.getElementById("fireworks-canvas");
+  const fwCtx = fwCanvas.getContext("2d");
+  let fwW, fwH;
+  let fireworks = [];
+  let fwParticles = [];
+  let fwAnimationId = null;
+
+  function resizeFireworks() {
+    fwW = fwCanvas.width = window.innerWidth;
+    fwH = fwCanvas.height = window.innerHeight;
+  }
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  class Firework {
+    constructor(tx, ty) {
+      this.x = fwW / 2;
+      this.y = fwH;
+      this.tx = tx;
+      this.ty = ty;
+      this.distanceToTarget = Math.sqrt(
+        Math.pow(tx - this.x, 2) + Math.pow(ty - this.y, 2),
+      );
+      this.distanceTraveled = 0;
+      this.coordinates = [];
+      this.coordinateCount = 3;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = Math.atan2(ty - this.y, tx - this.x);
+      this.speed = 2;
+      this.acceleration = 1.05;
+      this.brightness = random(50, 70);
+      this.targetRadius = 1;
+    }
+
+    update(index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+
+      if (this.targetRadius < 8) {
+        this.targetRadius += 0.3;
+      } else {
+        this.targetRadius = 1;
+      }
+
+      this.speed *= this.acceleration;
+      const vx = Math.cos(this.angle) * this.speed;
+      const vy = Math.sin(this.angle) * this.speed;
+
+      this.distanceTraveled = Math.sqrt(
+        Math.pow(this.x + vx - this.x, 2) + Math.pow(this.y + vy - this.y, 2),
+      );
+
+      if (this.distanceTraveled >= this.distanceToTarget) {
+        createParticles(this.tx, this.ty);
+        fireworks.splice(index, 1);
+      } else {
+        this.x += vx;
+        this.y += vy;
+      }
+    }
+
+    draw() {
+      fwCtx.beginPath();
+      fwCtx.moveTo(
+        this.coordinates[this.coordinates.length - 1][0],
+        this.coordinates[this.coordinates.length - 1][1],
+      );
+      fwCtx.lineTo(this.x, this.y);
+      fwCtx.strokeStyle =
+        "hsl(" + random(0, 360) + ", 100%, " + this.brightness + "%)";
+      fwCtx.stroke();
+    }
+  }
+
+  class FwParticle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.coordinates = [];
+      this.coordinateCount = 5;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = random(0, Math.PI * 2);
+      this.speed = random(1, 10);
+      this.friction = 0.95;
+      this.gravity = 1;
+      this.hue = random(0, 360);
+      this.brightness = random(50, 80);
+      this.alpha = 1;
+      this.decay = random(0.015, 0.03);
+    }
+
+    update(index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+      this.speed *= this.friction;
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed + this.gravity;
+      this.alpha -= this.decay;
+
+      if (this.alpha <= this.decay) {
+        fwParticles.splice(index, 1);
+      }
+    }
+
+    draw() {
+      fwCtx.beginPath();
+      fwCtx.moveTo(
+        this.coordinates[this.coordinates.length - 1][0],
+        this.coordinates[this.coordinates.length - 1][1],
+      );
+      fwCtx.lineTo(this.x, this.y);
+      fwCtx.strokeStyle =
+        "hsla(" +
+        this.hue +
+        ", 100%, " +
+        this.brightness +
+        "%, " +
+        this.alpha +
+        ")";
+      fwCtx.stroke();
+    }
+  }
+
+  function createParticles(x, y) {
+    let particleCount = 30;
+    while (particleCount--) {
+      fwParticles.push(new FwParticle(x, y));
+    }
+  }
+
+  function animateFireworks() {
+    fwAnimationId = requestAnimationFrame(animateFireworks);
+    fwCtx.globalCompositeOperation = "destination-out";
+    fwCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    fwCtx.fillRect(0, 0, fwW, fwH);
+    fwCtx.globalCompositeOperation = "lighter";
+
+    let i = fireworks.length;
+    while (i--) {
+      fireworks[i].draw();
+      fireworks[i].update(i);
+    }
+
+    let j = fwParticles.length;
+    while (j--) {
+      fwParticles[j].draw();
+      fwParticles[j].update(j);
+    }
+  }
+
+  function startFireworks() {
+    // Stop previous if any
+    if (fwAnimationId) cancelAnimationFrame(fwAnimationId);
+
+    // Clear canvas
+    fwCtx.clearRect(0, 0, fwW, fwH);
+    fireworks = [];
+    fwParticles = [];
+
+    animateFireworks();
+
+    // Launch random fireworks
+    let launchCount = 0;
+    const launchInterval = setInterval(() => {
+      fireworks.push(new Firework(random(0, fwW), random(0, fwH / 2)));
+      launchCount++;
+      // Stop launching after some shots but keep animation running for particles to fade
+      if (launchCount > 10) clearInterval(launchInterval);
+    }, 300);
+
+    // Stop animation loop after 5 seconds
+    setTimeout(() => {
+      clearInterval(launchInterval);
+      setTimeout(() => {
+        cancelAnimationFrame(fwAnimationId);
+        fwCtx.clearRect(0, 0, fwW, fwH); // Clear final frame
+      }, 3000); // 3s for particles to fade
+    }, 2000); // 2s duration of launching
+  }
+
   function drawLuckyMoney() {
     // Check if already drawn
     const config = JSON.parse(localStorage.getItem(CONFIG_KEY));
@@ -155,14 +342,20 @@ const app = (function () {
     amountEl.textContent = result.amount;
     wishEl.textContent = wish;
 
-    overlay.style.display = "block";
-    modal.classList.add("active");
-
+    // Trigger Firework & Sound
     const audio = new Audio("assets/firecracker.wav");
     audio.volume = 0.5;
     audio
       .play()
       .catch((e) => console.log("Audio play failed (Autoplay policy):", e));
+
+    startFireworks(); // <--- Trigger Fireworks Here
+
+    // Delay modal show slightly to see fireworks start
+    setTimeout(() => {
+      overlay.style.display = "block";
+      modal.classList.add("active");
+    }, 500);
 
     particles.forEach((p) => (p.vy += 8));
     setTimeout(() => particles.forEach((p) => (p.vy -= 8)), 300);
@@ -180,7 +373,12 @@ const app = (function () {
   window.addEventListener("resize", () => {
     resize();
     initParticles();
+    resizeFireworks(); // Resize fireworks canvas
   });
+
+  // Init fireworks size
+  resizeFireworks();
+
   btn.addEventListener("click", drawLuckyMoney);
   overlay.addEventListener("click", closeModal);
 
@@ -288,6 +486,7 @@ const app = (function () {
   function init() {
     resize();
     initParticles();
+    resizeFireworks();
     animate();
 
     checkSession(); // Check on load
@@ -308,15 +507,6 @@ const app = (function () {
         }
       });
     }
-
-    document.getElementById("drawBtn").addEventListener("click", () => {
-      // Play Sound
-      const sound = new Audio("assets/firecracker.wav");
-      sound.volume = 0.5;
-      sound.play().catch((e) => console.log("Audio play failed:", e));
-
-      drawLuckyMoney();
-    });
 
     // --- Shake to Draw (Lắc để nhận lì xì) ---
     let lastShakeTime = 0;
