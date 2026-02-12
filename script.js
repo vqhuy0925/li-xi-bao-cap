@@ -130,6 +130,13 @@ const app = (function () {
     overlay.style.display = "block";
     modal.classList.add("active");
 
+    // 4. Phát âm thanh (Audio API)
+    const audio = new Audio("assets/firecracker.wav");
+    audio.volume = 0.5; // Điều chỉnh âm lượng vừa phải
+    audio
+      .play()
+      .catch((e) => console.log("Audio play failed (Autoplay policy):", e));
+
     // Hiệu ứng pháo giấy nổ nhẹ khi trúng
     particles.forEach((p) => (p.vy += 8));
     setTimeout(() => particles.forEach((p) => (p.vy -= 8)), 300);
