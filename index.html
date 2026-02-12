@@ -84,7 +84,13 @@
             >
               <p id="alertMessage"></p>
             </div>
-            <button class="btn-close" onclick="app.closeAlert()">Đã Rõ</button>
+            <div
+              style="display: flex; justify-content: center; margin-top: 15px"
+            >
+              <button class="btn-close" onclick="app.closeAlert()">
+                Đã Rõ
+              </button>
+            </div>
           </div>
 
           <!-- Confirm Modal -->
@@ -101,7 +107,14 @@
             >
               <p>Kết thúc lượt chơi của đồng chí này?</p>
             </div>
-            <div style="display: flex; justify-content: center; gap: 15px">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 15px;
+              "
+            >
               <button
                 class="btn-close"
                 onclick="app.confirmReset()"
