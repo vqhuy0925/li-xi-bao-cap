@@ -205,6 +205,36 @@ h1 {
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* Alert Modal Specifics */
+#alertModal {
+  border: 2px solid #5d4037;
+  background: #f4e1c1; /* Giấy cũ vàng hơn */
+}
+#alertModal .calendar-header {
+  border-bottom: 2px solid #5d4037;
+  font-family: "Courier New", Courier, monospace;
+}
+#alertModal .btn-close {
+  background: #5d4037;
+  color: #f4e1c1;
+}
+
+/* Confirm Modal Specifics */
+#confirmModal {
+  border: 2px solid #5d4037;
+  background: #f4e1c1;
+}
+#confirmModal .calendar-header {
+  border-bottom: 2px solid #5d4037;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.modal.active {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
 .calendar-header {
   background: var(--red-retro);
   color: white;

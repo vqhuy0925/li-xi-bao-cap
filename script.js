@@ -137,6 +137,14 @@ const app = (function () {
       config.savedAmount = result.amount;
       config.savedWish = wish;
       localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+
+      // Save to Global History (Persistent)
+      const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      const normalizedName = config.userName.toLowerCase();
+      if (!history.includes(normalizedName)) {
+        history.push(normalizedName);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      }
     }
 
     amountEl.textContent = result.amount;
@@ -173,6 +181,7 @@ const app = (function () {
 
   // --- User Session Logic ---
   const CONFIG_KEY = "lixi_user_config";
+  const HISTORY_KEY = "lixi_user_history";
 
   function checkSession() {
     const config = JSON.parse(localStorage.getItem(CONFIG_KEY));
@@ -208,16 +217,68 @@ const app = (function () {
       return;
     }
 
+    // Check if user already played in history
+    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    const normalizedName = name.toLowerCase();
+    if (history.includes(normalizedName)) {
+      showAlert(
+        `Đồng chí "${name}" đã nhận lì xì rồi!<br>Vui lòng nhường cơ hội cho người khác.`,
+      );
+      return;
+    }
+
     const config = { userName: name };
     localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
     checkSession();
   }
 
   function resetSession() {
-    if (confirm("Kết thúc lượt chơi của đồng chí này?")) {
-      localStorage.removeItem(CONFIG_KEY);
-      location.reload();
+    // Show custom confirm modal instead of native confirm
+    const confirmModal = document.getElementById("confirmModal");
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
+    confirmModal.classList.add("active");
+  }
+
+  function confirmReset() {
+    localStorage.removeItem(CONFIG_KEY);
+    location.reload();
+  }
+
+  function closeConfirm() {
+    const confirmModal = document.getElementById("confirmModal");
+    const overlay = document.getElementById("overlay");
+
+    // Check if result modal is open beneath (it usually is when clicking reset)
+    const resultModal = document.getElementById("resultModal");
+
+    confirmModal.classList.remove("active");
+
+    // If result modal was active, keep overlay, otherwise hide
+    if (resultModal.classList.contains("active")) {
+      // do nothing, keep overlay
+    } else {
+      overlay.style.display = "none";
     }
+  }
+
+  // --- Alert System ---
+  function showAlert(msg) {
+    const alertModal = document.getElementById("alertModal");
+    const alertMsg = document.getElementById("alertMessage");
+    const overlay = document.getElementById("overlay");
+
+    alertMsg.innerHTML = msg;
+    overlay.style.display = "block";
+    alertModal.classList.add("active");
+  }
+
+  function closeAlert() {
+    const alertModal = document.getElementById("alertModal");
+    const overlay = document.getElementById("overlay");
+
+    overlay.style.display = "none";
+    alertModal.classList.remove("active");
   }
 
   // --- Init ---
@@ -303,5 +364,8 @@ const app = (function () {
     drawLuckyMoney,
     closeModal,
     resetSession,
+    closeAlert,
+    confirmReset,
+    closeConfirm,
   };
 })();

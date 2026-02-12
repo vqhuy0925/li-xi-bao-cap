@@ -38,7 +38,6 @@
 
             <!-- Screen 2: Game Screen (Hidden by default) -->
             <div id="gameScreen" style="display: none">
-              <div style="font-size: 4rem; margin: 2rem 0">🐎</div>
               <p
                 id="userGreeting"
                 class="slogan"
@@ -67,6 +66,55 @@
               <button class="btn-close" onclick="app.closeModal()">Đóng</button>
               <button class="btn-reset" onclick="app.resetSession()">
                 Người Tiếp Theo
+              </button>
+            </div>
+          </div>
+
+          <!-- Alert Modal (Generic) -->
+          <div class="modal" id="alertModal">
+            <div
+              class="calendar-header"
+              style="background: #5d4037; color: #d4af37"
+            >
+              THÔNG BÁO
+            </div>
+            <div
+              class="calendar-body"
+              style="padding: 20px; font-size: 1.2rem; color: #5d4037"
+            >
+              <p id="alertMessage"></p>
+            </div>
+            <button class="btn-close" onclick="app.closeAlert()">Đã Rõ</button>
+          </div>
+
+          <!-- Confirm Modal -->
+          <div class="modal" id="confirmModal">
+            <div
+              class="calendar-header"
+              style="background: #5d4037; color: #d4af37"
+            >
+              XÁC NHẬN
+            </div>
+            <div
+              class="calendar-body"
+              style="padding: 20px; font-size: 1.2rem; color: #5d4037"
+            >
+              <p>Kết thúc lượt chơi của đồng chí này?</p>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 15px">
+              <button
+                class="btn-close"
+                onclick="app.confirmReset()"
+                style="background: var(--red-retro); color: #fff; border: none"
+              >
+                Đồng ý
+              </button>
+              <button
+                class="btn-close"
+                onclick="app.closeConfirm()"
+                style="background: #8d6e63"
+              >
+                Hủy
               </button>
             </div>
           </div>
