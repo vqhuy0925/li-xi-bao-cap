@@ -299,6 +299,16 @@ const app = (function () {
     const registerBtn = document.getElementById("registerBtn");
     if (registerBtn) registerBtn.addEventListener("click", registerUser);
 
+    // Register Input (Enter key)
+    const nameInput = document.getElementById("userNameInput");
+    if (nameInput) {
+      nameInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          registerUser();
+        }
+      });
+    }
+
     document.getElementById("drawBtn").addEventListener("click", () => {
       // Play Sound
       const sound = new Audio("assets/firecracker.wav");
