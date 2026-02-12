@@ -504,6 +504,16 @@ const app = (function () {
     const registerBtn = document.getElementById("registerBtn");
     if (registerBtn) registerBtn.addEventListener("click", registerUser);
 
+    // Skip Button
+    const skipBtn = document.getElementById("skipBtn");
+    if (skipBtn) {
+      skipBtn.addEventListener("click", () => {
+        const config = { userName: "Khách Quý" };
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+        checkSession();
+      });
+    }
+
     // Register Input (Enter key)
     const nameInput = document.getElementById("userNameInput");
     if (nameInput) {
