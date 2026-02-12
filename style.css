@@ -275,30 +275,51 @@ h1 {
 
 /* --- TV Set CSS --- */
 
-/* --- TV Set CSS (Option 2: Matte Black 80s) --- */
+/* --- TV Set CSS (Option 3: Photorealistic Walnut Wood) --- */
 .tv-set {
-  background-color: #1e1e1e; /* Nhựa đen nhám */
-  padding: 25px;
-  border-radius: 4px; /* Góc vuông hơn */
+  /* 1. Giả lập vỏ gỗ Walnut sần sùi */
+  background-color: #5d4037;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.05) 0px,
+      rgba(0, 0, 0, 0.05) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.05) 0px,
+      rgba(0, 0, 0, 0.05) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    linear-gradient(to bottom, #4e342e, #3e2723);
+  padding: 30px;
+  border-radius: 15px;
   box-shadow:
-    0 0 0 5px #2d2d2d,
-    /* Viền nhựa nổi */ 20px 20px 40px rgba(0, 0, 0, 0.6);
+    inset 0 0 30px rgba(0, 0, 0, 0.8),
+    /* Bóng đổ trong tạo độ sâu */ 0 20px 50px rgba(0, 0, 0, 0.6),
+    /* Bóng đổ ngoài nền */ 0 0 0 10px #2d1e1a; /* Viền bao ngoài */
   display: flex;
   flex-direction: column;
   position: relative;
   max-width: 95vw;
-  border-top: 2px solid #555; /* Highlight trên */
+  border-top: 2px solid rgba(255, 255, 255, 0.1); /* Highlight cạnh trên */
 }
 
 .tv-body {
   display: flex;
   align-items: center;
-  background: #111;
-  padding: 25px;
-  border-radius: 2px;
-  box-shadow: inset 0 0 20px #000;
-  border: 2px solid #333;
-  gap: 20px;
+  /* Mặt nạ nhựa đen chứa màn hình và nút */
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 15px #000,
+    0 0 0 2px #3e2723; /* Viền gỗ ôm sát */
+  border: 1px solid #333;
+  gap: 25px;
 }
 
 .tv-screen {
@@ -307,16 +328,19 @@ h1 {
   max-width: 75vw;
   aspect-ratio: 4/3;
   background-color: #000;
-  border-radius: 50% / 10%; /* Cong dọc ít, cong ngang nhiều (Trinitron) */
-  border: 2px solid #333;
+  border-radius: 50% / 10%; /* Cong kiểu CRT Trinitron */
+  border: 8px solid #0d0d0d;
   overflow: hidden;
-  box-shadow: 0 0 0 10px #000; /* Viền đen dày quanh màn hình */
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 1),
+    /* Tối góc trong */ 0 0 0 2px #333; /* Viền kim loại mỏng */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 
-/* Reflection update - Sắc nét hơn cho màn hình kính */
+/* 2. Hiệu ứng Màn hình lồi & Phản chiếu (Glamour Glare) */
 .tv-screen::after {
   content: "";
   position: absolute;
@@ -324,166 +348,209 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    transparent 20%,
-    transparent 100%
-  );
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 20%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 40%,
+      transparent 100%
+    );
   pointer-events: none;
   z-index: 998;
   border-radius: inherit;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-/* Controls bên phải - Style nút bấm dọc */
+/* 3. Chi tiết Phần cứng (Control Panel) */
 .tv-controls {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 100px;
+  justify-content: space-between;
+  width: 130px;
   height: 100%;
-  padding: 10px 0;
-  border: none;
-  margin-left: 0;
-  background: transparent;
-  gap: 20px;
+  padding: 15px 10px;
+  background: linear-gradient(to right, #222, #181818);
+  border-left: 2px solid #000;
+  border-radius: 4px;
+  box-shadow: inset 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Brand Logo giả */
+/* Logo Chạm Khắc */
 .tv-controls::before {
-  content: "SONY_VN";
-  color: #ccc;
-  font-family: sans-serif;
+  content: "ĐIỆN TỬ";
+  color: #aaa;
+  font-family: serif; /* Font cổ điển */
   font-weight: bold;
-  font-style: italic;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-align: center;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.8); /* Khắc chìm */
+  border-bottom: 2px solid #333;
+  padding-bottom: 8px;
+  letter-spacing: 2px;
 }
 
-/* Loa - Dạng khe ngang nhỏ đục lỗ */
+/* Loa (Speaker Grille) - Tạo lỗ li ti */
 .tv-speaker {
-  display: grid;
-  grid-template-rows: repeat(12, 1fr);
-  gap: 3px;
   width: 100%;
+  height: 80px;
+  background-image:
+    radial-gradient(#111 20%, transparent 25%),
+    radial-gradient(#111 20%, transparent 25%);
+  background-color: #2a2a2a;
+  background-position:
+    0 0,
+    4px 4px;
+  background-size: 8px 8px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 5px #000;
+  border: 1px solid #333;
   margin-top: auto;
 }
 .tv-speaker span {
-  width: 100%;
-  height: 2px;
-  background: #000;
-  border-bottom: 1px solid #333;
+  display: none; /* Dùng gradient thay vì thẻ span */
 }
 
-/* Kênh - Nút bấm Channel Up/Down */
+/* Khu vực Núm vặn */
 .tv-channels {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-}
-
-.channel-knob {
-  width: 60px;
-  height: 20px;
-  background: linear-gradient(to bottom, #444, #222);
-  border: 1px solid #111;
-  border-radius: 2px;
-  box-shadow: 0 2px 0 #000;
-  cursor: pointer;
+  gap: 25px;
+  margin-bottom: 20px;
   position: relative;
 }
-.channel-knob:active {
-  transform: translateY(2px);
-  box-shadow: 0 0 0 #000;
+
+/* Núm vặn Kim loại/Nhựa (Knobs) */
+.channel-knob {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  /* Hiệu ứng phay xước kim loại xoáy tròn */
+  background: conic-gradient(
+    from 135deg,
+    #333,
+    #555,
+    #222,
+    #666,
+    #333,
+    #555,
+    #111
+  );
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.8),
+    0 -1px 2px rgba(255, 255, 255, 0.1);
+  position: relative;
+  cursor: grab;
+  border: 2px solid #111;
+}
+
+.channel-knob::after {
+  content: ""; /* Vạch chỉ vị trí */
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 4px;
+  height: 20%;
+  background: #ff5722;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgba(255, 87, 34, 0.8);
+}
+
+.channel-knob::before {
+  content: "CH";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #666;
+  font-size: 0.6rem;
+  font-family: sans-serif;
+  text-shadow: 0 1px 0 #000;
 }
 
 .small-knob {
-  width: 60px;
-  height: 20px; /* Volume Bar */
+  width: 50px;
+  height: 50px;
 }
-
-/* Label cho nút */
-.channel-knob::after {
-  content: "CH";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.6rem;
-  color: #888;
-  font-family: sans-serif;
-}
-.small-knob::after {
+.small-knob::before {
   content: "VOL";
 }
 
+/* Đèn nguồn (Power LED) */
 .power-btn {
-  width: 15px;
-  height: 15px;
-  background: #333;
-  border: 1px solid #000;
+  width: 12px;
+  height: 12px;
+  background: #ff0000;
   border-radius: 50%;
-  margin-top: 20px;
-  position: relative;
-}
-.power-btn::after {
-  content: "";
-  position: absolute;
-  top: 30%;
-  left: 30%;
-  width: 40%;
-  height: 40%;
-  background: red;
-  border-radius: 50%;
-  box-shadow: 0 0 5px red;
-  animation: blink 3s infinite;
+  margin-top: 15px;
+  box-shadow:
+    0 0 10px #ff0000,
+    0 0 20px #ff0000,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.5); /* Bóng đổ cho LED */
+  border: 1px solid #500;
+  animation: power-glow 3s infinite alternate;
 }
 
-@keyframes blink {
-  0%,
-  100% {
+@keyframes power-glow {
+  from {
+    opacity: 0.8;
+    box-shadow: 0 0 5px #ff0000;
+  }
+  to {
     opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
+    box-shadow:
+      0 0 15px #ff0000,
+      0 0 30px #ff0000;
   }
 }
 
-/* Chân TV đúc liền khối */
+/* Chân TV */
 .tv-legs {
-  display: none; /* TV đời này thường đặt bệt hoặc có chân đế xoay ẩn */
+  display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+  margin-top: -10px;
+  z-index: -1;
+}
+
+.leg {
+  width: 60px;
+  height: 40px;
+  background: #2d1e1a;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+  transform: none; /* Reset transform cũ */
 }
 
 /* Responsive adjustment */
 @media (max-width: 768px) {
   .tv-set {
-    padding: 10px;
+    padding: 15px;
   }
   .tv-body {
     flex-direction: column;
-    padding: 10px;
+    padding: 15px;
   }
   .tv-controls {
     width: 100%;
     height: auto;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     padding: 10px;
-    border-top: 2px solid #333;
-    background: #181818;
-    margin-top: 0;
+    border-left: none;
+    border-top: 2px solid #000;
   }
   .tv-controls::before {
-    margin-bottom: 0;
-    border-bottom: none;
-    margin-right: 15px;
+    display: none;
   }
   .tv-speaker {
     display: none;
@@ -491,19 +558,20 @@ h1 {
   .tv-channels {
     flex-direction: row;
     margin-bottom: 0;
+    gap: 30px;
   }
   .channel-knob {
-    width: 40px;
-    height: 15px;
+    width: 50px;
+    height: 50px;
   }
   .small-knob {
     width: 40px;
-    height: 15px;
+    height: 40px;
   }
   .tv-screen {
     width: 100%;
-    aspect-ratio: 1/1; /* More strict aspect on mobile */
-    border-radius: 10%;
+    aspect-ratio: 1/1;
+    border-radius: 20%;
   }
 }
 
