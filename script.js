@@ -436,6 +436,10 @@ const app = (function () {
   }
 
   function resetSession() {
+    // Hide result modal if open
+    const resultModal = document.getElementById("resultModal");
+    resultModal.classList.remove("active");
+
     // Show custom confirm modal instead of native confirm
     const confirmModal = document.getElementById("confirmModal");
     const overlay = document.getElementById("overlay");
