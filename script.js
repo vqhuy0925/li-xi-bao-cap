@@ -1,4 +1,9 @@
 const app = (function () {
+  "use strict";
+
+  const CONFIG_KEY = "lixi_user_config";
+  const HISTORY_KEY = "lixi_user_history";
+
   const canvas = document.getElementById("canvas-bg");
   const ctx = canvas.getContext("2d");
   const btn = document.getElementById("drawBtn");
@@ -180,8 +185,6 @@ const app = (function () {
   overlay.addEventListener("click", closeModal);
 
   // --- User Session Logic ---
-  const CONFIG_KEY = "lixi_user_config";
-  const HISTORY_KEY = "lixi_user_history";
 
   function checkSession() {
     const config = JSON.parse(localStorage.getItem(CONFIG_KEY));

@@ -55,14 +55,7 @@
               <div id="luckyAmount">...</div>
             </div>
             <div class="calendar-footer" id="luckyWish">...</div>
-            <div
-              style="
-                display: flex;
-                justify-content: space-around;
-                gap: 10px;
-                margin-top: 15px;
-              "
-            >
+            <div class="modal-actions">
               <button class="btn-close" onclick="app.closeModal()">Đóng</button>
               <button class="btn-reset" onclick="app.resetSession()">
                 Người Tiếp Theo
@@ -84,9 +77,7 @@
             >
               <p id="alertMessage"></p>
             </div>
-            <div
-              style="display: flex; justify-content: center; margin-top: 15px"
-            >
+            <div class="modal-actions">
               <button class="btn-close" onclick="app.closeAlert()">
                 Đã Rõ
               </button>
@@ -107,14 +98,7 @@
             >
               <p>Kết thúc lượt chơi của đồng chí này?</p>
             </div>
-            <div
-              style="
-                display: flex;
-                justify-content: center;
-                gap: 15px;
-                margin-top: 15px;
-              "
-            >
+            <div class="modal-actions">
               <button
                 class="btn-close"
                 onclick="app.confirmReset()"
