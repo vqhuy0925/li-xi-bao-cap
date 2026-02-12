@@ -7,29 +7,56 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Vintage CRT Overlay -->
-    <div class="vintage-crt-effect"></div>
+    <!-- TV Container -->
+    <div class="tv-set">
+      <div class="tv-body">
+        <!-- Màn hình TV -->
+        <div class="tv-screen">
+          <div class="vintage-crt-effect"></div>
+          <div class="noise-overlay"></div>
+          <canvas id="canvas-bg"></canvas>
 
-    <div class="noise-overlay"></div>
-    <canvas id="canvas-bg"></canvas>
+          <!-- Nội dung Game (Card) -->
+          <div class="main-stage">
+            <div class="stamp">KIỂM DUYỆT<br />2026</div>
+            <h1>Mã Đáo Thành Công</h1>
+            <p class="slogan">"Lao động hăng say - Vận may sẽ đến"</p>
+            <div style="font-size: 4rem; margin: 2rem 0">🐎</div>
+            <button class="btn-retro" id="drawBtn">RÚT THĂM</button>
+          </div>
 
-    <div class="main-stage">
-      <div class="stamp">KIỂM DUYỆT<br />2026</div>
-      <h1>Mã Đáo Thành Công</h1>
-      <p class="slogan">"Lao động hăng say - Vận may sẽ đến"</p>
-      <div style="font-size: 4rem; margin: 2rem 0">🐎</div>
-      <button class="btn-retro" id="drawBtn">RÚT THĂM</button>
-    </div>
+          <!-- Move Modal & Overlay inside Screen -->
+          <div class="overlay-dim" id="overlay"></div>
+          <div class="modal" id="resultModal">
+            <div class="calendar-header">XUÂN BÍNH NGỌ</div>
+            <div class="calendar-body">
+              <div id="luckyAmount">...</div>
+            </div>
+            <div class="calendar-footer" id="luckyWish">...</div>
+            <button class="btn-close" onclick="app.closeModal()">Đóng</button>
+          </div>
+        </div>
 
-    <div class="overlay-dim" id="overlay"></div>
-
-    <div class="modal" id="resultModal">
-      <div class="calendar-header">XUÂN BÍNH NGỌ</div>
-      <div class="calendar-body">
-        <div id="luckyAmount">...</div>
+        <!-- Bảng điều khiển (Loa, Núm vặn) -->
+        <div class="tv-controls">
+          <div class="tv-speaker">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="tv-channels">
+            <div class="channel-knob">
+              <div class="knob-line"></div>
+            </div>
+            <div class="channel-knob small-knob"></div>
+            <div class="power-btn"></div>
+          </div>
+        </div>
       </div>
-      <div class="calendar-footer" id="luckyWish">...</div>
-      <button class="btn-close" onclick="app.closeModal()">Đóng</button>
+      <!-- Chân đỡ TV -->
+      <div class="tv-legs">
+        <div class="leg left"></div>
+        <div class="leg right"></div>
+      </div>
     </div>
 
     <script src="script.js"></script>

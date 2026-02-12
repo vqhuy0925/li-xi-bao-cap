@@ -91,8 +91,14 @@ const app = (function () {
   }
 
   function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+    const screen = document.querySelector(".tv-screen");
+    if (screen) {
+      w = canvas.width = screen.clientWidth;
+      h = canvas.height = screen.clientHeight;
+    } else {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
   }
 
   function initParticles() {

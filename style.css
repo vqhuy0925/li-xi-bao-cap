@@ -131,13 +131,13 @@ h1 {
 /* Modal kết quả - Phong cách tờ lịch cũ */
 .modal {
   display: none;
-  position: fixed;
+  position: absolute; /* Changed from fixed */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
   background: #fff;
   padding: 20px;
-  z-index: 100;
+  z-index: 2000; /* Ensure explicitly high z-index inside screen */
   width: 300px;
   border: 1px solid var(--ink-color);
   box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.5);
@@ -177,14 +177,15 @@ h1 {
 
 .overlay-dim {
   display: none;
-  position: fixed;
+  position: absolute; /* Changed from fixed */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 50;
+  z-index: 1020; /* Between screen content and modal */
   backdrop-filter: sepia(80%);
+  border-radius: inherit; /* Follow screen border radius if needed */
 }
 
 @keyframes noise {
@@ -269,6 +270,297 @@ h1 {
   }
   100% {
     background-position: 0 100%;
+  }
+}
+
+/* --- TV Set CSS --- */
+
+/* --- TV Set CSS (Option 2: Matte Black 80s) --- */
+.tv-set {
+  background-color: #1e1e1e; /* Nhựa đen nhám */
+  padding: 25px;
+  border-radius: 4px; /* Góc vuông hơn */
+  box-shadow:
+    0 0 0 5px #2d2d2d,
+    /* Viền nhựa nổi */ 20px 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-width: 95vw;
+  border-top: 2px solid #555; /* Highlight trên */
+}
+
+.tv-body {
+  display: flex;
+  align-items: center;
+  background: #111;
+  padding: 25px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 20px #000;
+  border: 2px solid #333;
+  gap: 20px;
+}
+
+.tv-screen {
+  position: relative;
+  width: 600px;
+  max-width: 75vw;
+  aspect-ratio: 4/3;
+  background-color: #000;
+  border-radius: 50% / 10%; /* Cong dọc ít, cong ngang nhiều (Trinitron) */
+  border: 2px solid #333;
+  overflow: hidden;
+  box-shadow: 0 0 0 10px #000; /* Viền đen dày quanh màn hình */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Reflection update - Sắc nét hơn cho màn hình kính */
+.tv-screen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    transparent 20%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 998;
+  border-radius: inherit;
+}
+
+/* Controls bên phải - Style nút bấm dọc */
+.tv-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100px;
+  height: 100%;
+  padding: 10px 0;
+  border: none;
+  margin-left: 0;
+  background: transparent;
+  gap: 20px;
+}
+
+/* Brand Logo giả */
+.tv-controls::before {
+  content: "SONY_VN";
+  color: #ccc;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+
+/* Loa - Dạng khe ngang nhỏ đục lỗ */
+.tv-speaker {
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  gap: 3px;
+  width: 100%;
+  margin-top: auto;
+}
+.tv-speaker span {
+  width: 100%;
+  height: 2px;
+  background: #000;
+  border-bottom: 1px solid #333;
+}
+
+/* Kênh - Nút bấm Channel Up/Down */
+.tv-channels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.channel-knob {
+  width: 60px;
+  height: 20px;
+  background: linear-gradient(to bottom, #444, #222);
+  border: 1px solid #111;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 #000;
+  cursor: pointer;
+  position: relative;
+}
+.channel-knob:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #000;
+}
+
+.small-knob {
+  width: 60px;
+  height: 20px; /* Volume Bar */
+}
+
+/* Label cho nút */
+.channel-knob::after {
+  content: "CH";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  color: #888;
+  font-family: sans-serif;
+}
+.small-knob::after {
+  content: "VOL";
+}
+
+.power-btn {
+  width: 15px;
+  height: 15px;
+  background: #333;
+  border: 1px solid #000;
+  border-radius: 50%;
+  margin-top: 20px;
+  position: relative;
+}
+.power-btn::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  width: 40%;
+  height: 40%;
+  background: red;
+  border-radius: 50%;
+  box-shadow: 0 0 5px red;
+  animation: blink 3s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Chân TV đúc liền khối */
+.tv-legs {
+  display: none; /* TV đời này thường đặt bệt hoặc có chân đế xoay ẩn */
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .tv-set {
+    padding: 10px;
+  }
+  .tv-body {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .tv-controls {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-top: 2px solid #333;
+    background: #181818;
+    margin-top: 0;
+  }
+  .tv-controls::before {
+    margin-bottom: 0;
+    border-bottom: none;
+    margin-right: 15px;
+  }
+  .tv-speaker {
+    display: none;
+  }
+  .tv-channels {
+    flex-direction: row;
+    margin-bottom: 0;
+  }
+  .channel-knob {
+    width: 40px;
+    height: 15px;
+  }
+  .small-knob {
+    width: 40px;
+    height: 15px;
+  }
+  .tv-screen {
+    width: 100%;
+    aspect-ratio: 1/1; /* More strict aspect on mobile */
+    border-radius: 10%;
+  }
+}
+
+/* Update Main Stage Layout overrides when inside TV */
+.main-stage {
+  padding: 1rem;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  box-shadow: none; /* Bỏ shadow cũ vì đã có bóng TV */
+  border: none; /* Bỏ border khung tranh cũ */
+  /* Scale content if needed */
+  transform-origin: center;
+}
+
+/* Update Noise and CRT to fit screen */
+.vintage-crt-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit; /* Follow screen border radius */
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .tv-body {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .tv-controls {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    border-left: none;
+    border-top: 2px solid #2d1e1a;
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 10px;
+  }
+  .tv-speaker {
+    display: none; /* Hide speaker on mobile to save space */
+  }
+  .tv-channels {
+    flex-direction: row;
+    margin-bottom: 0;
+  }
+  .channel-knob {
+    width: 40px;
+    height: 40px;
+  }
+  .small-knob {
+    width: 30px;
+    height: 30px;
+  }
+  .tv-screen {
+    width: 100%;
+    aspect-ratio: 1/1; /* More strict aspect on mobile */
   }
 }
 
