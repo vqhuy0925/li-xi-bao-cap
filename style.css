@@ -62,8 +62,8 @@ body {
     0 20px 40px rgba(0, 0, 0, 0.5);
   /* Background ngựa phi nước đại (mô phỏng tranh Đông Hồ hoặc vẽ tay) */
   background-image:
-    linear-gradient(rgba(240, 230, 210, 0.9), rgba(240, 230, 210, 0.8)),
-    url("https://images.unsplash.com/photo-1598556608779-d5964867c05b?q=80&w=1000&auto=format&fit=crop");
+    linear-gradient(rgba(240, 230, 210, 0.4), rgba(240, 230, 210, 0.3)),
+    url("assets/ma-dao-thanh-cong.png");
   background-size: cover;
   background-position: center;
 }

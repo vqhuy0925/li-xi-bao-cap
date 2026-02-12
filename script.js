@@ -7,20 +7,32 @@ const app = (function () {
   const amountEl = document.getElementById("luckyAmount");
   const wishEl = document.getElementById("luckyWish");
 
-  // CẤU HÌNH TỈ LỆ (Total = 100%)
+  // 1. DANH SÁCH CÂU CHÚC (Decoupled Data)
+  const listWishes = [
+    "Sổ gạo đầy ắp, cả năm ấm no",
+    "Tem phiếu rủng rỉnh, mua gì cũng có",
+    "Tình duyên bền chặt như lốp xe thồ",
+    "Công danh tấn tới, không cần đặt gạch",
+    "Tiêu chuẩn phân phối, gấp năm gấp mười",
+    "Khỏe như Phượng Hoàng, lướt êm mọi nẻo",
+    "Mậu dịch mở cửa, không phải xếp hàng",
+    "Tết này rực rỡ, mì chính cánh gà",
+    "Lộc lá dồi dào, khỏi lo mất sổ",
+    "Vạn sự hanh thông, ưu tiên diện một",
+  ];
+
+  // 2. CẤU HÌNH TỈ LỆ TIỀN (Total = 100%)
   const prizeConfiguration = [
-    { percent: 50, amount: "10.000 Đ", wish: "Ăn no chóng lớn" }, // 50%
-    { percent: 30, amount: "20.000 Đ", wish: "Tiền vào như nước" }, // 30%
-    { percent: 10, amount: "50.000 Đ", wish: "Sức khỏe dồi dào" }, // 10%
-    { percent: 5, amount: "100.000 Đ", wish: "Mã đáo thành công" }, // 5%
-    { percent: 5, amount: "200.000 Đ", wish: "Vạn sự như ý" }, // 5%
+    { percent: 50, amount: "10.000 Đ" }, // 50%
+    { percent: 30, amount: "20.000 Đ" }, // 30%
+    { percent: 10, amount: "50.000 Đ" }, // 10%
+    { percent: 5, amount: "100.000 Đ" }, // 5%
+    { percent: 5, amount: "200.000 Đ" }, // 5%
   ];
 
   // Thuật toán Random theo trọng số (Weighted Random)
   function getWeightedRandom(items) {
-    // Tính tổng trọng số (để đảm bảo tính toán đúng dù tổng > 100 hay < 100)
     const totalWeight = items.reduce((sum, item) => sum + item.percent, 0);
-
     let randomNum = Math.random() * totalWeight;
 
     for (const item of items) {
@@ -32,7 +44,13 @@ const app = (function () {
     return items[0]; // Fallback an toàn
   }
 
-  // --- Phần Animation Canvas (Giữ nguyên hoặc tinh chỉnh) ---
+  // Hàm lấy câu chúc ngẫu nhiên
+  function getRandomWish() {
+    const randomIndex = Math.floor(Math.random() * listWishes.length);
+    return listWishes[randomIndex];
+  }
+
+  // --- Phần Animation Canvas (Giữ nguyên) ---
   let particles = [];
   let w, h;
 
@@ -97,13 +115,17 @@ const app = (function () {
     requestAnimationFrame(animate);
   }
 
-  // --- Xử lý sự kiện ---
+  // --- Xử lý sự kiện (Đã update logic random) ---
   function drawLuckyMoney() {
-    // Gọi hàm random có trọng số
+    // 1. Gọi hàm random tiền
     const result = getWeightedRandom(prizeConfiguration);
 
+    // 2. Gọi hàm random câu chúc riêng biệt
+    const wish = getRandomWish();
+
+    // 3. Render ra màn hình
     amountEl.textContent = result.amount;
-    wishEl.textContent = result.wish;
+    wishEl.textContent = wish;
 
     overlay.style.display = "block";
     modal.classList.add("active");
