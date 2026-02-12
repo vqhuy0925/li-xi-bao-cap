@@ -7,7 +7,6 @@ const app = (function () {
   const amountEl = document.getElementById("luckyAmount");
   const wishEl = document.getElementById("luckyWish");
 
-  // 1. DANH SÁCH CÂU CHÚC (Decoupled Data)
   const listWishes = [
     "Sổ gạo đầy ắp, cả năm ấm no",
     "Tem phiếu rủng rỉnh, mua gì cũng có",
@@ -21,7 +20,6 @@ const app = (function () {
     "Vạn sự hanh thông, ưu tiên diện một",
   ];
 
-  // 2. CẤU HÌNH TỈ LỆ TIỀN (Total = 100%)
   const prizeConfiguration = [
     { percent: 50, amount: "10.000 Đ" }, // 50%
     { percent: 30, amount: "20.000 Đ" }, // 30%
@@ -30,7 +28,6 @@ const app = (function () {
     { percent: 5, amount: "200.000 Đ" }, // 5%
   ];
 
-  // Thuật toán Random theo trọng số (Weighted Random)
   function getWeightedRandom(items) {
     const totalWeight = items.reduce((sum, item) => sum + item.percent, 0);
     let randomNum = Math.random() * totalWeight;
@@ -41,16 +38,14 @@ const app = (function () {
       }
       randomNum -= item.percent;
     }
-    return items[0]; // Fallback an toàn
+    return items[0];
   }
 
-  // Hàm lấy câu chúc ngẫu nhiên
   function getRandomWish() {
     const randomIndex = Math.floor(Math.random() * listWishes.length);
     return listWishes[randomIndex];
   }
 
-  // --- Phần Animation Canvas (Giữ nguyên) ---
   let particles = [];
   let w, h;
 
@@ -115,29 +110,22 @@ const app = (function () {
     requestAnimationFrame(animate);
   }
 
-  // --- Xử lý sự kiện (Đã update logic random) ---
   function drawLuckyMoney() {
-    // 1. Gọi hàm random tiền
     const result = getWeightedRandom(prizeConfiguration);
-
-    // 2. Gọi hàm random câu chúc riêng biệt
     const wish = getRandomWish();
 
-    // 3. Render ra màn hình
     amountEl.textContent = result.amount;
     wishEl.textContent = wish;
 
     overlay.style.display = "block";
     modal.classList.add("active");
 
-    // 4. Phát âm thanh (Audio API)
     const audio = new Audio("assets/firecracker.wav");
-    audio.volume = 0.5; // Điều chỉnh âm lượng vừa phải
+    audio.volume = 0.5;
     audio
       .play()
       .catch((e) => console.log("Audio play failed (Autoplay policy):", e));
 
-    // Hiệu ứng pháo giấy nổ nhẹ khi trúng
     particles.forEach((p) => (p.vy += 8));
     setTimeout(() => particles.forEach((p) => (p.vy -= 8)), 300);
   }
