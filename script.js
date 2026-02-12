@@ -252,7 +252,7 @@ const app = (function () {
   }
 
   function createParticles(x, y) {
-    let particleCount = 30;
+    let particleCount = 70;
     while (particleCount--) {
       fwParticles.push(new FwParticle(x, y));
     }
@@ -292,20 +292,22 @@ const app = (function () {
     // Launch random fireworks
     let launchCount = 0;
     const launchInterval = setInterval(() => {
+      // Launch multiple per tick for more density
+      fireworks.push(new Firework(random(0, fwW), random(0, fwH / 2)));
       fireworks.push(new Firework(random(0, fwW), random(0, fwH / 2)));
       launchCount++;
       // Stop launching after some shots but keep animation running for particles to fade
-      if (launchCount > 10) clearInterval(launchInterval);
-    }, 300);
+      if (launchCount > 20) clearInterval(launchInterval);
+    }, 200);
 
-    // Stop animation loop after 5 seconds
+    // Stop animation loop after 5 seconds to ensure cleanup
     setTimeout(() => {
       clearInterval(launchInterval);
       setTimeout(() => {
         cancelAnimationFrame(fwAnimationId);
         fwCtx.clearRect(0, 0, fwW, fwH); // Clear final frame
       }, 3000); // 3s for particles to fade
-    }, 2000); // 2s duration of launching
+    }, 4500); // Increased duration slightly
   }
 
   function drawLuckyMoney() {
